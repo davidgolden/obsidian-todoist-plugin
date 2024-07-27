@@ -29,7 +29,7 @@ type DataAccessor = {
 
 export class TodoistAdapter {
   public actions = {
-    closeTask: async (id: TaskId) => await this.closeTask(id),
+    closeTask: async (id: TaskId, swapAssignee: boolean) => await this.closeTask(id, swapAssignee),
     createTask: async (content: string, params: CreateTaskParams) =>
       await this.api.withInner((api) => api.createTask(content, params)),
   };
@@ -127,7 +127,7 @@ export class TodoistAdapter {
     };
   }
 
-  private async closeTask(id: TaskId): Promise<void> {
+  private async closeTask(id: TaskId, swapAssignee: boolean): Promise<void> {
     this.tasksPendingClose.push(id);
 
     for (const subscription of this.subscriptions.list()) {
@@ -135,7 +135,14 @@ export class TodoistAdapter {
     }
 
     try {
-      this.api.withInner((api) => api.closeTask(id));
+      this.api.withInner((api) => {
+        api.closeTask(id);
+        if (swapAssignee) {
+          api.updateTask(id, {
+            assignee_id: "47684129"
+          });
+        }
+      });
       this.tasksPendingClose.remove(id);
 
       for (const subscription of this.subscriptions.list()) {

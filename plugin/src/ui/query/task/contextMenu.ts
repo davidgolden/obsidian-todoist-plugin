@@ -14,7 +14,7 @@ export function showTaskContext(ctx: TaskContext, position: Point) {
       menuItem
         .setTitle("Complete task")
         .setIcon("check-small")
-        .onClick(async () => await ctx.plugin.services.todoist.actions.closeTask(ctx.task.id)),
+        .onClick(async () => await ctx.plugin.services.todoist.actions.closeTask(ctx.task.id, false)),
     )
     .addItem((menuItem) =>
       menuItem

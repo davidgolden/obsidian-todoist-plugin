@@ -37,6 +37,10 @@ export class TodoistApiClient {
     await this.do(`/tasks/${id}/close`, "POST");
   }
 
+  public async updateTask(id: TaskId, body: Partial<Task>): Promise<void> {
+    await this.do(`/tasks/${id}`, "POST", body);
+  }
+
   public async getProjects(): Promise<Project[]> {
     const response = await this.do("/projects", "GET");
     return camelize(JSON.parse(response.body)) as Project[];

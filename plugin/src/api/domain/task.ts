@@ -21,6 +21,8 @@ export type Task = {
   due: DueDate | null;
 
   order: number;
+
+  assignee_id: string;
 };
 
 export type Priority = 1 | 2 | 3 | 4;
